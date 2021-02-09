@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+
+<body>
+
+<header class="header">
+    <a href="index.html" th:href="@{'/'}"><img width="115" height="auto" src="../images/logo.png" alt="logo" th:src="@{/images/logo.png}"></a>
+    <link rel="stylesheet" href="../../static/css/main.css" th:href="@{/css/main.css}">
+</header>
+
+<nav class="topnav">
+    <ul>
+        <li><a href="index.html" th:href="@{'/'}">Home</a></li>
+        <li><a href="createItemForm.html" th:href="@{'/item/new'}">Form</a></li>
+    </ul>
+</nav>
+
+<section>
+
+    <h1>Offers</h1>
+
+    <div class="article-container">
+
+        <article th:each="item : ${items}" th:if="${item.type.name == 'Offer'}">
+            <h3><a th:href="@{'/item/'+${item.id}}" th:text="${item.title}">Item Name</a></h3>
+            <time datetime="YYYY-MM-DD" th:text="${#dates.format(item.date,'YYYY-MM-dd')}">Date YYYY-MM-DD</time>
+            <p th:text="${item.description}">
+                Description ...
+            </p>
+            <img src="../../static/images/no_image.svg" th:src="@{'/item/'+ ${item.id} + '/image'}">
+        </article>
+
+    </div>
+
+    <h1>Requests</h1>
+
+    <div class="article-container">
+
+        <article th:each="item : ${items}" th:if="${item.type.name == 'Request'}">
+            <h3><a th:href="'/item/'+${item.id}" th:text="${item.title}">Item Name</a></h3>
+            <time datetime="YYYY-MM-DD" th:text="${#dates.format(item.date,'YYYY-MM-dd')}">Date YYYY-MM-DD</time>
+            <p th:text="${item.description}">
+                Description ...
+            </p>
+            <img src="../../static/images/no_image.svg" th:src="@{'/item/'+ ${item.id} + '/image'}">
+        </article>
+
+    </div>
+
+</section>
+
+<aside></aside>
+
+<footer>
+    <small>Copyright © 2020 - Aleksandar Stojkovski</small>
+</footer>
+
+</body>
+</html>

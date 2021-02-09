@@ -1,0 +1,60 @@
+<!doctype html>
+<html xmlns:th=http://www.thymeleaf.org lang="en">
+
+  <head>
+    <title>Login</title>
+    <meta name="description" content="Main Page">
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet" type="text/css">
+  </head>
+
+  <body class="text-center">
+
+  <main class="container-fluid">
+
+  <form class="form-signin" method="post">
+
+      <a th:href="@{/}" tabindex="0" aria-label="Website Logo"><img src="../static/images/logo-guamp-w.png" width="250px" th:src="@{/images/logo-guamp-b.png}" class="mb-4" alt="website logo"></a>
+
+      <h1 class="h3 mb-3 font-weight-normal" aria-label="Login Page" tabindex="0">Please sign in</h1>
+
+      <div id="errorBox" class="alert alert-danger" role="alert" th:if="${param.error}">
+          Invalid username or password!
+      </div>
+
+      <label for="username" hidden tabindex="0">Username</label>
+      <div class="form-group input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+        </div>
+        <input type="text" id="username" class="form-control" placeholder="Username" name="username" required autofocus>
+      </div>
+
+      <label for="password" hidden tabindex="0">Password</label>
+      <div class="form-group input-group">
+          <div class="input-group-prepend">
+              <span class="input-group-text" style="max-height: 46px"> <i class="fa fa-lock"></i> </span>
+          </div>
+          <input id="password" name="password" class="form-control" placeholder="Password" type="password">
+      </div>
+
+      <div class="checkbox mb-3">
+        <!--<label><input type="checkbox" value="remember-me">Remember me</label>-->
+        <label aria-label="Not a member jet ?" tabindex="0">Not a member yet? <a th:href="@{'/register'}" tabindex="0">Join now</a></label>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit" tabindex="0">Sign in</button>
+
+      <footer tabindex="0">
+        <p class="mt-5 mb-3 text-muted" aria-label="Copyright">Copyright © 2020 - Aleksandar Stojkovski</p>
+      </footer>
+      
+  </form>
+
+  </main>
+
+  </body>
+
+
+</html>

@@ -1,0 +1,92 @@
+<!doctype html>
+<html xmlns:th=http://www.thymeleaf.org>
+
+  <head>
+    <title>Register</title>
+    <meta name="description" content="Register">
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet" type="text/css">
+
+    <script>
+      function validateForm(){
+        document.getElementById("formErrorDiv").childNodes.forEach(n => n.remove());
+        var nameForm = document.getElementById('nameForm').value;
+        var nameRGEX = /^[A-Za-z]+$/;
+        var nameResult = nameRGEX.test(nameForm);
+        if(nameResult == false)
+        {
+          var errorDiv = document.getElementById("formErrorDiv");
+          var text = document.createTextNode("Name must contain only alphabets characters!");
+          var tag = document.createElement("small");
+          tag.style["color"] = "red";
+          tag.appendChild(text);
+          errorDiv.appendChild(tag);
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </head>
+
+  <div class="card bg-light">
+    <article class="card-body mx-auto" style="max-width: 800px;">
+
+      <h4 class="card-title mt-3 text-center">Create Account</h4>
+
+      <p class="text-center">Get started with your free account</p>
+
+      <form method="post" class="form-signin">
+
+        <div class="form-group input-group" id="nameField">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+          </div>
+          <input name="name" class="form-control" placeholder="Name" type="text" required oninput="validateForm()">
+        </div>
+
+        <div class="form-group input-group" id="surnameField">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+          </div>
+          <input name="surname" class="form-control" placeholder="Surname" type="text" required>
+        </div>
+
+        <div class="form-group input-group" id="usernameField">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+          </div>
+          <input name="username" class="form-control" placeholder="Username" type="text" required>
+        </div>
+
+        <div class="form-group input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+          </div>
+          <input name="password" class="form-control" placeholder="Create Password" type="password" required>
+        </div>
+
+        <div class="form-group input-group" style="margin-bottom: 0px">
+          <div class="input-group-prepend">
+            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+          </div>
+          <input name="confirmpassword" class="form-control" placeholder="Confirm Password" type="password" required>
+        </div>
+
+        <div id="formErrorDiv" class="form-group input-group">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+          <!--<button type="submit" class="btn btn-primary btn-block" onclick="return validateForm()">Create Account</button>-->
+        </div>
+
+        <p class="text-center">Have an account? <a th:href="@{/login}">Log In</a></p>
+
+      </form>
+
+    </article>
+
+  </div>
+
+</html>

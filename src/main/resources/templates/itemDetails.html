@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+      th:replace="~{master :: layout(~{::title},~{::meta},~{::main},_,~{::link},_)}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta name="description" content="Item Details">
+    <title>Item Details</title>
+    <link href="../static/css/album.css" th:href="@{/css/album.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<main role="main">
+
+        <div class="container text-center p-4">
+            <h1 class="jumbotron-heading" th:text="${item.title}">Title</h1>
+        </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <a>
+          <img style="max-height: 200px;float: left;object-fit: cover;" class="card-img-top" src="../static/images/no_image.svg" th:src="@{'/item/'+ ${item.id} + '/image'}" alt="Item Image">
+      </a>
+    </div>
+    <div class="col-md-6">
+      <div class="col-md-12" th:text="${item.description}">
+           Description
+      </div>
+    </div>
+  </div>
+    <br>
+    <div class="d-flex justify-content-center">
+        <form method="get" th:if="${isOwner}" th:action="@{'/item/' + ${item.id} + '/edit'}" style="all: unset">
+            <input type="submit" value="Edit" class="btn btn-primary mr-1">
+        </form>
+        <form method="get" sec:authorize="hasRole('ADMIN')" th:action="@{'/item/' + ${item.id} + '/delete'}" style="all: unset">
+            <input type="submit" value="Delete" class="btn btn-danger mr-1">
+        </form>
+    </div>
+</div>
+
+</main>
+
+</body>
+</html>

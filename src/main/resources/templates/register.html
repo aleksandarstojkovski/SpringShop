@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns:th=http://www.thymeleaf.org lang="en">
+
+<head>
+    <title>Login</title>
+    <meta name="description" content="Main Page">
+    <link th:href="@{/css/signin.css}" rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/js/formValidator.js}"></script>
+</head>
+
+<body class="text-center">
+
+<main class="container-fluid">
+
+<form class="form-signin" method="post">
+
+    <a th:href="@{/}"><img src="../static/images/logo-guamp-w.png" width="250px" th:src="@{/images/logo-guamp-b.png}" class="mb-4" alt="website logo"></a>
+
+    <h1 class="h3 mb-3 font-weight-normal" aria-label="Create account" tabindex="0">Create account</h1>
+
+    <p class="text-center" tabindex="0">Get started with your free account</p>
+
+    <div id="errorBox" class="alert alert-danger" role="alert" th:if="${param.error}" tabindex="0" aria-label="There is an error:">
+        <span>Username already exists!</span>
+        <br>
+        <span>Please chose another one.</span>
+    </div>
+
+    <label for="name" hidden>Name</label>
+    <div class="form-group input-group m-0" id="nameField">
+        <input type="text" id="name" class="form-control" placeholder="Name" name="name" required autofocus oninput="validateForm(this.id,this.value)">
+    </div>
+    <div class="form-group input-group" id="nameErrorMessage"></div>
+
+    <label for="surname" hidden>Surname</label>
+    <div class="form-group input-group m-0" id="surnameField">
+        <input type="text" id="surname" class="form-control" placeholder="Surname" name="surname" required autofocus oninput="validateForm(this.id,this.value)">
+    </div>
+    <div class="form-group input-group" id="surnameErrorMessage"></div>
+
+    <label for="username" hidden>Username</label>
+    <div class="form-group input-group m-0" id="usernameField">
+        <input type="text" id="username" class="form-control" placeholder="Username" name="username" required autofocus oninput="validateForm(this.id,this.value)">
+    </div>
+    <div class="form-group input-group" id="usernameErrorMessage"></div>
+
+    <label for="password" hidden>Password</label>
+    <div class="form-group input-group m-0" id="passwordField">
+        <input id="password" name="password" class="form-control" placeholder="Password" type="password" autofocus oninput="validateForm(this.id,this.value)">
+    </div>
+    <div class="form-group input-group" id="passwordErrorMessage"></div>
+
+    <label for="confirmPassword" hidden>Cofnrim Password</label>
+    <div class="form-group input-group m-0" id="confirmPasswordField">
+        <input id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm Password" type="password" autofocus oninput="validateForm(this.id,this.value)">
+    </div>
+    <div class="form-group input-group" id="confirmPasswordErrorMessage"></div>
+
+    <div class="checkbox mb-3">
+        <label tabindex="0">Already a member? <a tabindex="0" th:href="@{'/login'}">Login</a></label>
+    </div>
+
+    <div id="registerButtonPlaceholder">
+    </div>
+
+    <footer tabindex="0">
+        <p class="mt-5 mb-3 text-muted">Copyright © 2020 - Aleksandar Stojkovski</p>
+    </footer>
+
+</form>
+
+</main>
+
+</body>
+
+
+</html>

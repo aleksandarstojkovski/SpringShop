@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th=http://www.thymeleaf.org
+      th:replace="~{master :: layout(~{::title},~{::meta},~{::main},_,~{::link},~{::script})}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+
+<head>
+    <meta name="description" content="Main Page">
+    <title>Main Page</title>
+    <link href="../static/css/album.css" th:href="@{/css/album.css}" rel="stylesheet">
+    <script th:src="@{/js/search.js}"></script>
+</head>
+
+<body>
+
+<main role="main">
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Welcome</h1>
+            <p class="lead text-muted">search the item you desire</p>
+            <!--
+            <p>
+                <a href="old/createItemForm.html" th:href="@{'/item/new'}" class="btn btn-primary my-2">New Item</a>
+                <a href="login.html" th:href="@{'/login'}" class="btn btn-secondary my-2">Login</a>
+            </p>
+            -->
+            <label for="searchInput" hidden>Search</label>
+            <div class="input-group mb-1">
+                <input type="text" class="form-control" id="searchInput" aria-label="Search Input">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="searchButton" aria-label="Search Button">
+                        <i class="fas fa-search">
+                            <span style="display: none">Search</span>
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <span class="text-secondary font-italic" id="searchInfo"></span>
+        </div>
+    </section>
+
+    <div class="album bg-light py-3">
+        <div class="container">
+
+            <div class="row" th:if="${items.size()==0}">
+                <div class="col text-center">
+                    <h2 tabindex="0">There are no articles</h2>
+                    <p class="lead" tabindex="0">Unfortunately there are no articles at the moment. Please login to create one!</p>
+                </div>
+            </div>
+
+            <div class="row py-4" th:if="${offers.size()>0}">
+                <div class="col text-center">
+                    <h2 aria-label="Offers Section" tabindex="0">Offers</h2>
+                </div>
+            </div>
+
+            <div class="row" id="offerContainer">
+                <!--
+                <div class="col-md-4" th:each="item : ${items}" th:if="${item.type.name == 'Offer'}">
+                    <div class="card mb-4 box-shadow">
+                        <img style="max-height: 200px;float: left;object-fit: cover;" class="card-img-top" src="../static/images/no_image.svg" th:src="@{'/item/'+ ${item.id} + '/image'}" alt="Image">
+                        <div class="card-body">
+                            <h5><a th:href="@{'/item/'+${item.id}}" th:text="${item.title}">Item Name</a></h5>
+                            <p class="card-text" th:text="${#strings.abbreviate(item.description,36)}">Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="@{'/item/'+${item.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
+                                    <a sec:authorize="isAuthenticated()" th:href="@{'/item/'+${item.id}+'/edit'}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
+                                    <a sec:authorize="hasRole('ADMIN')" th:href="@{'/item/'+${item.id}+'/delete'}"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
+                                </div>
+                                <small class="text-muted" datetime="YYYY-MM-DD" th:text="${#dates.format(item.date,'YYYY-MM-dd')}">01.01.2020</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <hr class="m-0 p-0" th:if="${offers.size()>0 && requests.size()>0}"/>
+
+            <div class="row py-4" th:if="${requests.size()>0}">
+                <div class="col text-center">
+                    <h2 aria-label="Requests Section" tabindex="0">Requests</h2>
+                </div>
+            </div>
+
+            <div class="row" id="requestContainer">
+                <!--
+                <div class="col-md-4" th:each="item : ${items}" th:if="${item.type.name == 'Request'}">
+                    <div class="card mb-4 box-shadow">
+                        <img style="max-height: 200px;float: left;object-fit: cover;" class="card-img-top" src="../static/images/no_image.svg" th:src="@{'/item/'+ ${item.id} + '/image'}" alt="Image">
+                        <div class="card-body">
+                            <h5><a th:href="@{'/item/'+${item.id}}" th:text="${item.title}">Item Name</a></h5>
+                            <p class="card-text" th:text="${#strings.abbreviate(item.description,36)}">Description</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a th:href="@{'/item/'+${item.id}}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
+                                    <a sec:authorize="isAuthenticated()" th:href="@{'/item/'+${item.id}+'/edit'}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
+                                    <a sec:authorize="hasRole('ADMIN')" th:href="@{'/item/'+${item.id}+'/delete'}"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
+                                </div>
+                                <small class="text-muted" datetime="YYYY-MM-DD" th:text="${#dates.format(item.date,'YYYY-MM-dd')}">01.01.2020</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+        </div>
+    </div>
+
+</main>
+
+</body>
+
+</html>

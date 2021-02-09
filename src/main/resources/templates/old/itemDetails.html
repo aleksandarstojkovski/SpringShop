@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+
+<header class="header">
+    <a href="index.html" th:href="@{'/'}"><img width="115" height="auto" src="../images/logo.png" alt="logo" th:src="@{/images/logo.png}"></a>
+    <link rel="stylesheet" href="../../static/css/main.css" th:href="@{/css/main.css}">
+</header>
+
+<nav class="topnav">
+    <ul>
+        <li><a href="index.html" th:href="@{'/'}">Home</a></li>
+        <li><a href="createItemForm.html" th:href="@{'/item/new'}">Form</a></li>
+    </ul>
+</nav>
+
+<section>
+    <h1>Selected item:</h1>
+    <div class="article-container">
+        <article>
+            <h3 th:text="${item.title}">Titolo</h3>
+            <time datetime="YYYY-MM-dd" th:text="${#dates.format(item.date,'YYYY-MM-dd')}">YYYY-MM-dd</time>
+            <p th:text="${item.description}">Description ...</p>
+        </article>
+    </div>
+    <div style="text-align: center">
+        <form method="get" th:action="@{'/item/' + ${item.id} + '/edit'}" style="all: unset">
+            <input type="submit" value="Edit">
+        </form>
+
+        <form method="get" th:action="@{'/item/' + ${item.id} + '/delete'}" style="all: unset">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
+    <br>
+</section>
+
+<footer>
+    <small>Copyright © 2020 - Aleksandar Stojkovski</small>
+</footer>
+
+</body>
+</html>
