@@ -1,8 +1,12 @@
 package ch.supsi.webapp.web.controller;
 
+import ch.supsi.webapp.web.controller.service.CategoryService;
 import ch.supsi.webapp.web.controller.service.ItemService;
+import ch.supsi.webapp.web.controller.service.SottoCategoryService;
 import ch.supsi.webapp.web.controller.service.UserService;
+import ch.supsi.webapp.web.model.Category;
 import ch.supsi.webapp.web.model.Item;
+import ch.supsi.webapp.web.model.SottoCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +28,12 @@ public class MainApiController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CategoryService categoryService;
+
+    @Autowired
+    SottoCategoryService sottoCategoryService;
 
     @RequestMapping(method= RequestMethod.GET, produces = {"application/json"})
     public List<Item> get() {
@@ -84,6 +94,16 @@ public class MainApiController {
             return new ResponseEntity<>(itemService.findAllByAuthor(username),HttpStatus.OK);
         }
         return new ResponseEntity<>(new ArrayList<Item>(),HttpStatus.NOT_FOUND);
+    }
+
+    @RequestMapping(value="/subcategories", method=RequestMethod.GET, produces = {"application/json"})
+    public ResponseEntity<List<SottoCategory>> getSubcategoryOfCategory(@RequestParam("q") String textToSearch) {
+        Optional<Category> category = categoryService.findById(textToSearch);
+        List<SottoCategory> lista = new ArrayList<>();
+        if(category.isPresent()){
+            lista = category.get().getSottoCategorie();
+        }
+        return new ResponseEntity<>(lista, HttpStatus.OK);
     }
 
 }

@@ -28,8 +28,11 @@ public class Item {
     @ManyToOne
     private User author;
 
-    @OneToOne
+    @ManyToOne
     private Category category;
+
+    @ManyToOne
+    private SottoCategory sottoCategory;
 
     @ManyToOne
     private Type type;
@@ -46,5 +49,8 @@ public class Item {
         this.category = item.category;
         this.type = item.type;
     }
+
+    @ManyToOne
+    private Gruppo gruppo;
 
 }

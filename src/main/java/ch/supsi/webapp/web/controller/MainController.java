@@ -1,9 +1,7 @@
 package ch.supsi.webapp.web.controller;
 
-import ch.supsi.webapp.web.controller.service.CategoryService;
-import ch.supsi.webapp.web.controller.service.ItemService;
-import ch.supsi.webapp.web.controller.service.TypeService;
-import ch.supsi.webapp.web.controller.service.UserService;
+import ch.supsi.webapp.web.controller.service.*;
+import ch.supsi.webapp.web.model.Gruppo;
 import ch.supsi.webapp.web.model.Item;
 import ch.supsi.webapp.web.model.Role;
 import ch.supsi.webapp.web.model.User;
@@ -20,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +38,12 @@ public class MainController {
 
     @Autowired
     TypeService typeService;
+
+    @Autowired
+    GruppoService gruppoService;
+
+    @Autowired
+    SottoCategoryService sottoCategoryService;
 
     @Autowired
     ResourceLoader resourceLoader;
@@ -79,6 +85,7 @@ public class MainController {
         model.addAttribute("types", typeService.findAll());
         model.addAttribute("item", item);
         model.addAttribute("action","create");
+        model.addAttribute("gruppo", "");
         return "createItemForm";
     }
 
@@ -137,11 +144,29 @@ public class MainController {
     }
 
     @PostMapping("/item/new")
-    public String createItem(Item item, @RequestParam("file") MultipartFile file, Model model) throws IOException {
+    public String createItem(Item item, @RequestParam("file") MultipartFile file, Model model, String gruppoId) throws IOException {
         if(!file.isEmpty())
             item.setImage(file.getBytes());
+        if (gruppoId.length() >0){
+            Optional<Gruppo> gruppo = gruppoService.findById(Integer.parseInt(gruppoId));
+            if (gruppo.isPresent()){
+                item.setGruppo(gruppo.get());
+                gruppo.get().getItems().add(item);
+            }
+
+        }
+        /*
+        item.getCategory().getItemsInThisCategory().add(item);
+        item.getSottoCategory().getItemInThisSubCategory().add(item);
+        categoryService.save(item.getCategory());
+        sottoCategoryService.save(item.getSottoCategory());
+         */
         itemService.save(item);
-        return "redirect:/";
+
+        if (gruppoId.length() >0)
+            return "redirect:/gruppi/" + Integer.parseInt(gruppoId);
+        else
+            return "redirect:/";
     }
 
     @GetMapping("/item/{id}/delete")
@@ -168,5 +193,80 @@ public class MainController {
         else
             return null;
     }
+
+    @GetMapping("/gruppi")
+    public String gruppi(Model model) {
+        User user = userService.findAuthenticatedUser();
+        model.addAttribute("gruppi", gruppoService.findAll());
+        model.addAttribute("gruppiUtente", user.getGruppiSottoscritti());
+        return "gruppi";
+    }
+
+    @GetMapping("/gruppi/crea")
+    public String gruppiCrea(Model model) {
+        return "creaGruppo";
+    }
+
+    @PostMapping("/gruppi/crea")
+    public String gruppiCreaPost(Model model, String nome, String descrizione) {
+        Gruppo gruppo = new Gruppo();
+        gruppo.setAuthor(userService.findAuthenticatedUser());
+        gruppo.setDate(new Date());
+        gruppo.setDescription(descrizione);
+        gruppo.setTitle(nome);
+        gruppo.setUtentiSottoscritti(new ArrayList<>());
+        gruppo.getUtentiSottoscritti().add(userService.findAuthenticatedUser());
+        gruppoService.save(gruppo);
+        userService.findAuthenticatedUser().getGruppiSottoscritti().add(gruppo);
+        return "redirect:/gruppi";
+    }
+
+    @GetMapping("/gruppi/{id}")
+    public String gruppiCrea(@PathVariable int id,Model model) {
+        Optional<Gruppo> gruppo = gruppoService.findById(id);
+        if (gruppo.isPresent()){
+            model.addAttribute("faccioParte", userService.findAuthenticatedUser().getGruppiSottoscritti().stream().anyMatch(gruppo1 -> gruppo1.getTitle().equals(gruppo.get().getTitle())));
+            model.addAttribute("gruppo", gruppo.get());
+            model.addAttribute("annunci", gruppo.get().getItems());
+            return "gruppoDetails";
+        } else {
+            return "redirect:/404.html";
+        }
+    }
+
+    @PostMapping("/gruppi/{id}/iscriviti")
+    public String iscrivitiPost(@PathVariable int id,Model model) {
+        Optional<Gruppo> gruppo = gruppoService.findById(id);
+        if (gruppo.isPresent()){
+            gruppo.get().getUtentiSottoscritti().add(userService.findAuthenticatedUser());
+            userService.findAuthenticatedUser().getGruppiSottoscritti().add(gruppo.get());
+            gruppoService.save(gruppo.get());
+            userService.save(userService.findAuthenticatedUser());
+            return "redirect:/gruppi/" + id;
+        } else {
+            return "redirect:/404.html";
+        }
+    }
+
+    @GetMapping("/gruppi/{id}/aggiungiannuncio")
+    public String aggiungiannuncio(@PathVariable int id,Model model) {
+        Optional<Gruppo> gruppo = gruppoService.findById(id);
+        if (gruppo.isPresent()){
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Optional<User> user = userService.findById(userDetails.getUsername());
+            Item item = new Item();
+            user.ifPresent(item::setAuthor);
+            model.addAttribute("categories", categoryService.findAll());
+            model.addAttribute("authors", userDetails);
+            model.addAttribute("types", typeService.findAll());
+            model.addAttribute("item", item);
+            model.addAttribute("action","create");
+            model.addAttribute("gruppo", gruppo.get().getId());
+            return "createItemForm";
+        } else {
+            return "redirect:/404.html";
+        }
+    }
+
 
 }
